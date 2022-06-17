@@ -31,6 +31,33 @@ export class Cipher {
   }
   static decode(text, shift) {
     if (!this.#validateText(text) || !this.#validateShift(shift)) return '';
+    if (shift < 1) shift = Math.abs(shift);
+    let result = [];
+    for (let i = 0; i < text.length; i++) {
+      let asciiVal = text.charCodeAt(i);
+      if (asciiVal >= 65 && asciiVal <= 90) {
+        let newVal = asciiVal - shift;
+        while (newVal < 65) {
+          newVal += 26;
+        }
+        result.push(String.fromCharCode(newVal));
+      } else if (asciiVal >= 97 && asciiVal <= 122) {
+        let newVal = asciiVal - shift;
+        while (newVal < 97) {
+          newVal += 26;
+        }
+        result.push(String.fromCharCode(newVal));
+      } else if (asciiVal >= 48 && asciiVal <= 57) {
+        let newVal = asciiVal - shift;
+        while (newVal < 48) {
+          newVal += 10;
+        }
+        result.push(String.fromCharCode(newVal));
+      } else {
+        result.push(String.fromCharCode(asciiVal));
+      }
+    }
+    return result.join('');
   }
   static #validateText(text) {
     return typeof text === 'string';
